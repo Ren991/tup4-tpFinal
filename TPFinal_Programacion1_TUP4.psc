@@ -1,21 +1,113 @@
 Proceso TPFinal_Programacion1_TUP4
-	Definir totalLibros Como Caracter
+	Definir totalLibros,totalUsuarios,usuarioActual Como Caracter
 	Definir cantLibros Como Entero
 	cantLibros <- 100
+	
 	Dimension totalLibros[cantLibros,4]
+	Dimension totalUsuarios[10,2]
+	
 	
 	Escribir "Bienvenido a la biblioteca !!"
+	
 	cargarLibros(totalLibros)
+	cargarUsuarios(totalUsuarios)
 	Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
 		Escribir "Nombre:" totalLibros[i,0] , " Autor:" totalLibros[i,1] , " Genero: " totalLibros[i,2] , " Alquilado: " totalLibros[i,3]
 	Fin Para
 	
+
+
+	Repetir
+		Escribir "Ingrese una opcion : 1-Usuario , 2-Administrador"
+		Leer userOAdmin
+	Hasta Que userOAdmin = 1 o userOAdmin = 2
+	
+	
+	Si userOAdmin == 1 Entonces //SI ES USUARIO SE MUESTRA EL MENU DE USUARIO
+		
+		menuUsuario(totalUsuarios,usuarioActual)
+		
+	SiNo						//SI ES ADMIN SE MUESTRA EL MENU DE ADMIN
+		menuAdministrador()
+	FinSi
 	
 	
 FinProceso
 
 
-SubProceso cargarLibros(totalLibros)
+SubProceso menuUsuario(totalUsuarios,usuarioActual) //Este subproceso muestra el menú del usuario arrancando por la validacion.
+	Escribir "Menu usuario"
+	validacionInicioSesion(totalUsuarios,usuarioActual)
+FinSubProceso
+
+SubProceso validacionInicioSesion(totalUsuarios,usuarioActual) // Esta función valida que el usuario y la contraseña que se ingresa pertenecen a un usuario registrado.
+	Definir usuario,contrasena,respuesta Como Caracter
+	
+	Repetir
+		Escribir "Ingrese usuario válido"
+		Leer usuario
+		
+		Escribir "Ingrese contraseña"
+		Leer contrasena
+		
+		respuesta <- compararCredenciales(usuario,contrasena,totalUsuarios,usuarioActual)
+	
+	Hasta Que respuesta <> "falso"
+	Escribir "Bienvenid@ " respuesta, " !"
+	
+FinSubProceso
+
+Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios,usuarioActual)
+	//Esta funcion compara las credenciales que ingreso el usuario con las que se definieron en totalUsuarios. 
+	//Si las encuentra devuelve el nombre , y sino devuelve un "falso"
+	
+	Definir bandera, i  Como Entero
+	
+	bandera <- 0
+	i <- 0
+	
+	Mientras bandera == 0 y i <= 10-1 Hacer
+		
+		si usuario == totalUsuarios[i,0] y contrasena == totalUsuarios[i,1] Entonces
+			
+			bandera <- 1
+			//usuarioActual <- totalUsuarios[i,0]
+			return <- totalUsuarios[i,0]
+		sino
+			
+			bandera <- 0 
+			i <- i + 1
+			
+		FinSi
+		
+	Fin Mientras
+	
+	si bandera = 0 Entonces
+		
+		escribir "credenciales inválidas"
+		return <- "falso"
+		
+	FinSi
+	
+FinFuncion
+
+SubProceso menuAdministrador()
+	Escribir "Menu administrador"
+FinSubProceso
+
+SubProceso cargarUsuarios(totalUsuarios) // Esta función setea 4 usuarios y contraseñas en el array totalUsuarios
+ totalUsuarios[0,0] = "JohnDoe"
+ totalUsuarios[0,1] = "pass123"
+ totalUsuarios[1,0] = "JaneSmith"
+ totalUsuarios[1,1] = "qwerty"
+ totalUsuarios[2,0] = "AlexJohnson"
+ totalUsuarios[2,1] = "password"
+ totalUsuarios[3,0] = "EmilyBrown"
+ totalUsuarios[3,1] = "abc123"
+FinSubProceso
+
+SubProceso cargarLibros(totalLibros) // ESTE SUBRPOCESO DEFINE LA CARGA DE LOS 100 LIBROS CON EL NOMBRE 
+									 // EL AUTOR, EL GENERO , Y LA 4TA COLUMNA INDICA SI EL libro ESTÁ ALQUILADO O NO.
 	
 	totalLibros[0,0] = "Romeo y Julieta"
 	totalLibros[0,1] = "William Shakespeare"
