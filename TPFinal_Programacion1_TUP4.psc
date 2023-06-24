@@ -36,28 +36,72 @@ FinProceso
 
 
 SubProceso menuUsuario(totalUsuarios,usuarioActual) //Este subproceso muestra el menú del usuario arrancando por la validacion.
-	Escribir "Menu usuario"
-	validacionInicioSesion(totalUsuarios,usuarioActual)
+	//En usuario Actual se almacena el nombre del usuario.
+	
+	Definir opcionUsuario Como Entero
+    Escribir "Menu usuario"
+    usuarioActual <- validacionInicioSesion(totalUsuarios)
+	Escribir usuarioActual
+    Repetir
+        Escribir "Ingrese una opcion"
+        Escribir "1-Alquilar Libro"
+        Escribir "2-Ordenar Libros por autor"
+        Escribir "3-Ordenar Libros por género"
+        Escribir "4-Devolver un libro"
+        Escribir "5-Ver libros alquilados"
+        Escribir "6-Salir"
+		
+        Leer opcionUsuario
+		
+        Segun opcionUsuario Hacer
+            caso 1:
+                
+            caso 2:
+				
+            caso 3:
+				
+            caso 4:
+				
+            caso 5:
+				
+            caso 6:
+                Escribir "Muchas gracias"
+            caso contrario:
+                Escribir "Opción inválida. Intente nuevamente."
+        Fin Segun
+		
+    Hasta Que opcionUsuario = 6
 FinSubProceso
 
-SubProceso validacionInicioSesion(totalUsuarios,usuarioActual) // Esta función valida que el usuario y la contraseña que se ingresa pertenecen a un usuario registrado.
+
+
+
+
+
+Funcion return <- validacionInicioSesion(totalUsuarios) // Esta función valida que el usuario y la contraseña que se ingresa pertenecen a un usuario registrado.
 	Definir usuario,contrasena,respuesta Como Caracter
 	
-	Repetir
+	Repetir		//Hasta que no matcheen el user con el password no deja continuar.
 		Escribir "Ingrese usuario válido"
 		Leer usuario
 		
 		Escribir "Ingrese contraseña"
 		Leer contrasena
 		
-		respuesta <- compararCredenciales(usuario,contrasena,totalUsuarios,usuarioActual)
-	
+		respuesta <- compararCredenciales(usuario,contrasena,totalUsuarios)
+		
+		
 	Hasta Que respuesta <> "falso"
-	Escribir "Bienvenid@ " respuesta, " !"
 	
-FinSubProceso
+	return <- respuesta
+	Escribir "Bienvenid@ " respuesta " !"
+	
+	
+FinFuncion
 
-Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios,usuarioActual)
+
+
+Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios)
 	//Esta funcion compara las credenciales que ingreso el usuario con las que se definieron en totalUsuarios. 
 	//Si las encuentra devuelve el nombre , y sino devuelve un "falso"
 	
@@ -71,7 +115,7 @@ Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios,usuarioA
 		si usuario == totalUsuarios[i,0] y contrasena == totalUsuarios[i,1] Entonces
 			
 			bandera <- 1
-			//usuarioActual <- totalUsuarios[i,0]
+			
 			return <- totalUsuarios[i,0]
 		sino
 			
