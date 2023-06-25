@@ -59,7 +59,7 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Est
             caso 2:
 				ordenarLibrosPorAutor(totalLibros,cantLibros)
             caso 3:
-				
+				ordenarLibrosPorGenero(totalLibros, cantLibros)
             caso 4:
 				
             caso 5:
@@ -73,69 +73,126 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Est
     Hasta Que opcionUsuario = 6
 FinSubProceso
 
-//ORDENARLIBROSPORAUTOR
-SubProceso ordenarLibrosPorAutor(totalLibros, cantLibros) // Este subproceso ordena los libros por el autor que ingrese el usuario.
-    Definir autor, autores, autorAnterior Como Caracter
-	Definir respuesta como Logico
-    Definir cantAutores Como Entero
-    cantAutores <- 0
-    
-    
-    autorAnterior <- totalLibros[0, 1]
-    Dimension autores[cantLibros]
-    
-    Para i<-0 Hasta cantLibros-1 Con Paso 1 Hacer
-        autorActual <- totalLibros[i, 1]
-        Si autorActual <> autorAnterior Entonces
-            autores[cantAutores] <- autorActual
-            cantAutores <- cantAutores + 1
-        FinSi
-        autorAnterior <- autorActual
+//ORDENAR LIBRO POR GENERO
+SubProceso ordenarLibrosPorGenero(totalLibros, cantLibros)
+    Definir generos,genero,generoActual Como  Caracter
+    Definir cantGeneros Como Entero
+	Dimension generos[cantLibros]
+    cantGeneros <- 0
+	generoActual <- totalLibros[0, 2]
+	Definir encontrado Como Logico
+    Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+        generoActual <- totalLibros[i, 2]
+        
+        encontrado <- Falso
+        
+        Para j <- 0 Hasta cantGeneros - 1 Con Paso 1 Hacer
+            Si generoActual = generos[j] Entonces
+                encontrado <- Verdadero
+                
+            Fin Si
+        Fin Para
+        
+        Si encontrado = Falso Entonces
+            generos[cantGeneros] <- generoActual
+            cantGeneros <- cantGeneros + 1
+        Fin Si
     Fin Para
     
     
+	Escribir "Géneros disponibles:"
+    Para i <- 0 Hasta cantGeneros - 1 Con Paso 1 Hacer
+        Escribir generos[i]
+    Fin Para
     
-	Repetir
-		Escribir "Ingrese autor válido"
-		Para i<-0 Hasta cantAutores-1 Con Paso 1 Hacer
-			Escribir autores[i] ,"-> autor"
-		Fin Para
-		Leer autor
-		respuesta <- compararAutor( autor, autores,cantAutores) 
+	
+		Repetir
+			Escribir "Ingrese un género válido"
+			Leer genero
+			
+			
+			encontrado <- Falso
+			
+			Para i <- 0 Hasta cantGeneros - 1 Con Paso 1 Hacer
+				Si genero = generos[i] Entonces
+					encontrado <- Verdadero
+					
+				Fin Si
+			Fin Para
+			
+			
+				
+			Escribir "No se encontró ese género, pruebe con otro."
+		Hasta Que encontrado <> Falso
 		
-		Si respuesta == Falso Entonces
-			Escribir "No se encontró ese autor, pruebe con otro"
-		Fin Si
-	Hasta Que respuesta == Verdadero
-	
-	
-	Para i <- 0 Hasta cantLibros -1 con Paso 1 Hacer
-		Si totalLibros[i, 1] == autor
-			Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
-		FinSi
-	FinPara
-    
-	
+		Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+			Si totalLibros[i, 2] = genero Entonces
+				
+				Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+			FinSi
+		Fin Para
 FinSubProceso
 
-Funcion return <- compararAutor( autor, autores,cantAutores) // ESTA FUNCION VERIFICA QUE EXISTA EL AUTOR QUE INGRESA EL USUARIO
-	Definir bandera Como Entero
-	Para i <- 0 Hasta cantAutores Hacer
+
+//ORDENARLIBROSPORAUTOR
+SubProceso ordenarLibrosPorAutor(totalLibros, cantLibros)
+    Definir autores,autor,autorActual Como  Caracter
+    Definir cantAutores Como Entero
+	Dimension autores[cantLibros]
+    cantAutores <- 0
+	autorActual <- totalLibros[0, 1]
+	Definir encontrado Como Logico
+    Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+        autorActual <- totalLibros[i, 1]
+        
+        encontrado <- Falso
+        
+        Para j <- 0 Hasta cantAutores - 1 Con Paso 1 Hacer
+            Si autorActual = autores[j] Entonces
+                encontrado <- Verdadero
+                
+            Fin Si
+        Fin Para
+        
+        Si encontrado = Falso Entonces
+            autores[cantAutores] <- autorActual
+            cantAutores <- cantAutores + 1
+        Fin Si
+    Fin Para
+    
+    
+	Escribir "Géneros disponibles:"
+    Para i <- 0 Hasta cantAutores - 1 Con Paso 1 Hacer
+        Escribir autores[i]
+    Fin Para
+    
+	
+	Repetir
+		Escribir "Ingrese un autor válido"
+		Leer autor
 		
-			Si autor == autores[i] Entonces
-				
-				return <- Verdadero
-				bandera <- 1
+		
+		encontrado <- Falso
+		
+		Para i <- 0 Hasta cantAutores - 1 Con Paso 1 Hacer
+			Si autor = autores[i] Entonces
+				encontrado <- Verdadero
 				
 			Fin Si
+		Fin Para
 		
-	Fin Para
-	Si bandera <> 1 Entonces
-		return <- Falso
-	Fin Si
+		
+		
+		Escribir "No se encontró ese género, pruebe con otro."
+	Hasta Que encontrado <> Falso
 	
-FinFuncion
-
+	Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+		Si totalLibros[i, 1] = autor Entonces
+			
+			Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+		FinSi
+	Fin Para
+FinSubProceso
 
 
 
