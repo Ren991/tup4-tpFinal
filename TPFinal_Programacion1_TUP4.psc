@@ -74,25 +74,71 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Est
 FinSubProceso
 
 //ORDENARLIBROSPORAUTOR
-SubProceso ordenarLibrosPorAutor(totalLibros,cantLibros)
-	Definir autor,autores,autorAnterior Como Caracter
-	Definir cantAutores Como Entero
-	cantAutores <-0
-	
-	Escribir "Ingrese un autor"
-	autorAnterior <- totalLibros[0, 1] 
-	Para i<-0 Hasta cantLibros-1 Con Paso 1 Hacer
-		autorActual <- totalLibros[i, 1]
-		Si autorActual <> autorAnterior Entonces
-            Escribir autorActual
-			cantAutores <- cantAutores +1
+SubProceso ordenarLibrosPorAutor(totalLibros, cantLibros) // Este subproceso ordena los libros por el autor que ingrese el usuario.
+    Definir autor, autores, autorAnterior Como Caracter
+	Definir respuesta como Logico
+    Definir cantAutores Como Entero
+    cantAutores <- 0
+    
+    
+    autorAnterior <- totalLibros[0, 1]
+    Dimension autores[cantLibros]
+    
+    Para i<-0 Hasta cantLibros-1 Con Paso 1 Hacer
+        autorActual <- totalLibros[i, 1]
+        Si autorActual <> autorAnterior Entonces
+            autores[cantAutores] <- autorActual
+            cantAutores <- cantAutores + 1
         FinSi
-		autorAnterior <- autorActual
-	Fin Para
-	Escribir cantAutores-1	
-	Leer autor
-
+        autorAnterior <- autorActual
+    Fin Para
+    
+    
+    
+	Repetir
+		Escribir "Ingrese autor válido"
+		Para i<-0 Hasta cantAutores-1 Con Paso 1 Hacer
+			Escribir autores[i] ,"-> autor"
+		Fin Para
+		Leer autor
+		respuesta <- compararAutor( autor, autores,cantAutores) 
+		
+		Si respuesta == Falso Entonces
+			Escribir "No se encontró ese autor, pruebe con otro"
+		Fin Si
+	Hasta Que respuesta == Verdadero
+	
+	
+	Para i <- 0 Hasta cantLibros -1 con Paso 1 Hacer
+		Si totalLibros[i, 1] == autor
+			Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+		FinSi
+	FinPara
+    
+	
 FinSubProceso
+
+Funcion return <- compararAutor( autor, autores,cantAutores) // ESTA FUNCION VERIFICA QUE EXISTA EL AUTOR QUE INGRESA EL USUARIO
+	Definir bandera Como Entero
+	Para i <- 0 Hasta cantAutores Hacer
+		
+			Si autor == autores[i] Entonces
+				
+				return <- Verdadero
+				bandera <- 1
+				
+			Fin Si
+		
+	Fin Para
+	Si bandera <> 1 Entonces
+		return <- Falso
+	Fin Si
+	
+FinFuncion
+
+
+
+
 
 // ALQUILARLIBRO 
 SubProceso alquilarLibro(totalLibros,cantLibros,usuarioActual) // Esta función realiza el alquiler del libro por parte del usuario
