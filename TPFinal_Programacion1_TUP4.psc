@@ -11,9 +11,7 @@ Proceso TPFinal_Programacion1_TUP4
 	
 	cargarLibros(totalLibros)
 	cargarUsuarios(totalUsuarios)
-	Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
-		Escribir "Nombre:" totalLibros[i,0] , " Autor:" totalLibros[i,1] , " Genero: " totalLibros[i,2] , " Alquilado: " totalLibros[i,3]
-	Fin Para
+	
 	
 
 
@@ -25,7 +23,7 @@ Proceso TPFinal_Programacion1_TUP4
 	
 	Si userOAdmin == 1 Entonces //SI ES USUARIO SE MUESTRA EL MENU DE USUARIO
 		
-		menuUsuario(totalUsuarios,usuarioActual)
+		menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros)
 		
 	SiNo						//SI ES ADMIN SE MUESTRA EL MENU DE ADMIN
 		menuAdministrador()
@@ -35,7 +33,7 @@ Proceso TPFinal_Programacion1_TUP4
 FinProceso
 
 
-SubProceso menuUsuario(totalUsuarios,usuarioActual) //Este subproceso muestra el menú del usuario arrancando por la validacion.
+SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Este subproceso muestra el menú del usuario arrancando por la validacion.
 	//En usuario Actual se almacena el nombre del usuario.
 	
 	Definir opcionUsuario Como Entero
@@ -55,7 +53,7 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual) //Este subproceso muestra el
 		
         Segun opcionUsuario Hacer
             caso 1:
-                
+                alquilarLibro(totalLibros,cantLibros,usuarioActual)
             caso 2:
 				
             caso 3:
@@ -74,6 +72,30 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual) //Este subproceso muestra el
 FinSubProceso
 
 
+SubProceso alquilarLibro(totalLibros,cantLibros,usuarioActual) // Esta función realiza el alquiler del libro por parte del usuario
+	// Se le muestra el catalogo de libros , y luego de escribir un número se almacena su nombre del usuario en totalLibro[libroAAlquilar-1,3]
+	Definir libroAAlquilar Como Entero
+	Repetir
+		Escribir "Escriba el número del libro que desea alquilar"
+		
+		Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
+			Escribir "Numero:" i+1 "|| Nombre:", totalLibros[i, 0], "|| Autor:", totalLibros[i, 1], "|| Genero:", totalLibros[i, 2], "|| Alquilado:", totalLibros[i, 3]
+		Fin Para
+		
+		Leer libroAAlquilar
+		
+		Si libroAAlquilar < 1 o libroAAlquilar > cantLibros Entonces
+			Escribir "El número ingresado no es válido. Por favor, ingrese un número entre 1 y", cantLibros
+		Fin Si
+	Mientras Que libroAAlquilar < 1 o libroAAlquilar > cantLibros
+	
+	totalLibros[libroAAlquilar-1,3] <- usuarioActual
+	Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
+		Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+	Fin Para
+	
+	
+FinSubProceso
 
 
 
