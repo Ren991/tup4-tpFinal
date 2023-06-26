@@ -61,9 +61,9 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Est
             caso 3:
 				ordenarLibrosPorGenero(totalLibros, cantLibros)
             caso 4:
-				
+				devolverLibro(totalLibros,cantLibros,usuarioActual)
             caso 5:
-				
+				verLibrosAlquilados(totalLibros,cantLibros,usuarioActual)
             caso 6:
                 Escribir "Muchas gracias"
             caso contrario:
@@ -72,6 +72,130 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Est
 		
     Hasta Que opcionUsuario = 6
 FinSubProceso
+
+
+//VERLIBROSALQUILADOS 
+SubProceso verLibrosAlquilados(totalLibros,cantLibros,usuarioActual) //ESTA FUNCION MUESTRA LOS LIBROS QUE ALQUILÓ EL USUARIO
+	
+	Definir cantLibrosAlquilados Como Entero
+    Dimension librosAlquilados[cantLibros, 2]
+    cantLibrosAlquilados <- 0
+    
+    Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+        Si usuarioActual == totalLibros[i, 3] Entonces
+            librosAlquilados[cantLibrosAlquilados, 0] <- totalLibros[i, 0]
+            librosAlquilados[cantLibrosAlquilados, 1] <- totalLibros[i, 1]
+            cantLibrosAlquilados <- cantLibrosAlquilados + 1
+            Escribir totalLibros[i, 0]
+        FinSi
+    FinPara
+    
+    Escribir "Cantidad de libros alquilados:", cantLibrosAlquilados
+    
+    Si cantLibrosAlquilados == 0 Entonces
+        Escribir "Debe alquilar un libro para continuar"
+    SiNo
+					
+			Para i <- 0 Hasta cantLibrosAlquilados - 1 Con Paso 1 Hacer
+				Escribir "Nombre :" librosAlquilados[i, 0], " || " "Autor: " librosAlquilados[i, 1]
+				
+			FinPara
+    FinSi
+		
+FinSubProceso
+
+
+//DEVOLVER LIBRO ALQUILADO
+
+SubProceso devolverLibro(totalLibros, cantLibros, usuarioActual) // Este subproceso se utiliza para cambiar el status de alquilado en el array principal de libros.
+	Definir respuesta Como Logico
+	Definir ingresoLibroUser como Caracter
+    Definir cantLibrosAlquilados Como Entero
+    Dimension librosAlquilados[cantLibros, 2]
+    cantLibrosAlquilados <- 0
+    
+    Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+        Si usuarioActual == totalLibros[i, 3] Entonces
+            librosAlquilados[cantLibrosAlquilados, 0] <- totalLibros[i, 0]
+            librosAlquilados[cantLibrosAlquilados, 1] <- totalLibros[i, 1]
+            cantLibrosAlquilados <- cantLibrosAlquilados + 1
+            Escribir totalLibros[i, 0]
+        FinSi
+    FinPara
+    
+    Escribir "Cantidad de libros alquilados:", cantLibrosAlquilados
+    
+    Si cantLibrosAlquilados == 0 Entonces
+        Escribir "Debe alquilar un libro para continuar"
+    SiNo
+		
+		Repetir
+			
+		 
+			Escribir "Ingrese el nombre del libro que desea devolver"
+			Para i <- 0 Hasta cantLibrosAlquilados - 1 Con Paso 1 Hacer
+				Escribir "Nombre :" librosAlquilados[i, 0], " || " "Autor: " librosAlquilados[i, 1]
+				
+			FinPara
+			Leer ingresoLibroUser
+			respuesta <- compararLibroAlquilado(cantLibrosAlquilados,ingresoLibroUser,librosAlquilados)
+		Hasta Que respuesta <> Falso
+	
+		Escribir "Libro devuelto con éxito"
+		
+		Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
+			Si ingresoLibroUser == totalLibros[i,0] Entonces
+					totalLibros[i,3] <- "-"			
+			FinSi
+		Fin Para
+		
+		Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
+			Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+		Fin Para
+		
+
+    FinSi
+FinSubProceso
+
+
+
+Funcion return <- compararLibroAlquilado(cantLibrosAlquilados,ingresoLibroUser,librosAlquilados)
+	//Esta funcion compara lo que ingresa el usuario en la función de arriba con el array de los libros alquilados
+	//Si lo encuentra cambia el estado de alquilado: "nombreUser" a alquilado:"-"
+	
+	Definir bandera, i  Como Entero
+	
+	bandera <- 0
+	i <- 0
+	
+	Mientras bandera == 0 y i <= cantLibrosAlquilados Hacer
+		
+		si ingresoLibroUser == librosAlquilados[i,0] 
+			
+			bandera <- 1
+			
+			return <- Verdadero
+		sino
+			
+			bandera <- 0 
+			i <- i + 1
+			
+		FinSi
+		
+	Fin Mientras
+	
+	si bandera = 0 Entonces
+		
+		escribir "Nombre inválido"
+		return <- Falso
+		
+	FinSi
+	
+FinFuncion
+
+
+
+
 
 //ORDENAR LIBRO POR GENERO
 SubProceso ordenarLibrosPorGenero(totalLibros, cantLibros)
