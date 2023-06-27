@@ -1,11 +1,12 @@
 Proceso TPFinal_Programacion1_TUP4
 	Definir totalLibros,totalUsuarios,usuarioActual Como Caracter
-	Definir cantLibros, librosCargados Como Entero
+	Definir cantLibros, librosCargados, cantUsuarios Como Entero
 	cantLibros <- 150
 	
 	
+	
 	Dimension totalLibros[cantLibros,4]
-	Dimension totalUsuarios[10,2]
+	Dimension totalUsuarios[20,2]
 	
 	
 	Escribir "Bienvenido a la biblioteca !!"
@@ -13,7 +14,7 @@ Proceso TPFinal_Programacion1_TUP4
 	cargarLibros(totalLibros)
 	librosCargados<-100
 	cargarUsuarios(totalUsuarios)
-	
+	cantUsuarios <- 4
 	
 	
 
@@ -29,7 +30,7 @@ Proceso TPFinal_Programacion1_TUP4
 		menuUsuario(totalUsuarios,usuarioActual,totalLibros,librosCargados)
 		
 	SiNo						//SI ES ADMIN SE MUESTRA EL MENU DE ADMIN
-		menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados)
+		menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados, cantUsuarios)
 	FinSi
 	
 	
@@ -409,7 +410,7 @@ Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios)
 	
 FinFuncion
 
-SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados Por Referencia)
+SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados Por Referencia, cantUsuarios Por Referencia)
 	Definir opcionUsuario Como Entero
     Escribir "Bienvenido al menu administrador"
 	
@@ -417,12 +418,13 @@ SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCarga
 	Escribir usuarioActual
 	
     Repetir
-        Escribir "Ingrese una opcion"
-        Escribir "1- Ver listado de libros"
-        Escribir "2- Agregar libro"
-        Escribir "3- Dar un libro en alquiler"
-        Escribir "4- Retorno de libro"
-        Escribir "5- Salir"
+        Escribir "Ingrese una opcion:"
+        Escribir "1- Ver listado de libros."
+        Escribir "2- Agregar libro."
+        Escribir "3- Agregar usuario."
+        Escribir "4- Ver lista de usuarios."
+		Escribir "5- Ver porcentaje de genero."
+        Escribir "6- Salir."
 		
         Leer opcionUsuario
 		
@@ -432,10 +434,12 @@ SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCarga
             caso 2:
 				agregarLibro(totalLibros,librosCargados)
             caso 3:
-				Escribir "3- Dar un libro en alquiler"
+				agregarUsuario(totalUsuarios, cantUsuarios)
             caso 4:
-				Escribir "4- Retorno de libro"
+				verUsuarios(totalUsuarios, cantUsuarios)
             caso 5:
+                verGenero(totalLibros, librosCargados)
+			caso 6:
                 Escribir "Muchas gracias"
             caso contrario:
                 Escribir "Opción inválida. Intente nuevamente."
@@ -469,7 +473,7 @@ SubProceso agregarLibro(totalLibros, cantLibros Por Referencia)
 	Fin Mientras
 	//HAY UN ERROR QUE NO TE MUESTRA EL ULTIMO LIBRO QUE AGREGAS, PERO SI AGREGAS OTRO DESPUES SI TE LO MUESTRA
 	Para i<-0 Hasta aAgregar-1 Hacer
-		cantLibros = cantLibros + 1
+		
 		
 		Escribir "Ingrese el nombre del libro"
 		Leer totalLibros[cantLibros, 0]
@@ -481,6 +485,40 @@ SubProceso agregarLibro(totalLibros, cantLibros Por Referencia)
 		Leer totalLibros[cantLibros, 2]
 		
 		Escribir "Perfecto! El libro " + totalLibros[cantLibros, 0] + " fue ingresado con éxito."
+		cantLibros = cantLibros + 1
+	Fin Para
+FinSubProceso
+
+SubProceso agregarUsuario(totalUsuarios, cantUsuarios Por Referencia)
+	Definir aAgregar, i Como Entero
+	Escribir "Cuantos usuarios desea agregar?"
+	Leer aAgregar
+	
+	Mientras aAgregar<1 O aAgregar>16 Hacer
+		Escribir "El maximo para agregar son 16 usuarios, ingrese un numero valido"
+		Leer aAgregar
+	Fin Mientras
+	
+	Para i<-0 Hasta aAgregar-1 Hacer
+		Escribir "Ingrese el nombre de usuario:"
+		Leer totalUsuarios[cantUsuarios,0]
+		
+		Escribir "Ingrese la contraseña de usuario:"
+		Leer totalUsuarios[cantUsuarios,1]
+		
+		Escribir "Excelente, el usuario "+ totalUsuarios[cantUsuarios,0] " fue creado con exito!"
+		cantUsuarios <- cantUsuarios + 1
+	Fin Para
+
+FinSubProceso
+
+SubProceso verUsuarios(totalUsuarios, cantUsuarios Por Referencia)
+	//Con esta funcion solo mostramos la lista al administrador
+	Definir i Como Entero
+	Escribir "Mostrando los " cantUsuarios " usuarios:"
+	
+	Para i<-0 Hasta cantUsuarios-1 Hacer
+		Escribir "Nombre de usuario: " totalUsuarios[i,0] , " ||" " Contraseña: " totalUsuarios[i,1]
 	Fin Para
 FinSubProceso
 
