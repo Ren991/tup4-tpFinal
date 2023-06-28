@@ -17,8 +17,8 @@ Proceso TPFinal_Programacion1_TUP4
 	cantUsuarios <- 4
 	
 	
-
-
+	
+	
 	Repetir
 		Escribir "Ingrese una opcion : 1-Usuario , 2-Administrador"
 		Leer userOAdmin
@@ -41,39 +41,47 @@ FinProceso
 SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Este subproceso muestra el menú del usuario arrancando por la validacion.
 	//En usuario Actual se almacena el nombre del usuario.
 	
-	Definir opcionUsuario Como Entero
+	Definir opcionUsuario Como Caracter
     Escribir "Menu usuario"
     usuarioActual <- validacionInicioSesion(totalUsuarios)
 	Escribir usuarioActual
     Repetir
         Escribir "Ingrese una opcion"
         Escribir "1-Alquilar Libro"
-        Escribir "2-Ordenar Libros por autor"
-        Escribir "3-Ordenar Libros por género"
+        Escribir "2-Buscar Libros por autor"
+        Escribir "3-Buscar Libros por género"
         Escribir "4-Devolver un libro"
         Escribir "5-Ver libros alquilados"
-        Escribir "6-Salir"
+		Escribir "6-Ordenar libros de manera ascendente"
+        Escribir "Ingrese salir para salir del programa"
 		
-        Leer opcionUsuario
+        Leer opcionUsuario 
 		
+		opcionUsuario <- Mayusculas(opcionUsuario)
         Segun opcionUsuario Hacer
-            caso 1:
+            caso "1":
                 alquilarLibro(totalLibros,cantLibros,usuarioActual)
-            caso 2:
-				ordenarLibrosPorAutor(totalLibros,cantLibros)
-            caso 3:
-				ordenarLibrosPorGenero(totalLibros,cantLibros)
-            caso 4:
+            caso "2":
+				buscarLibrosPorAutor(totalLibros,cantLibros)
+            caso "3":
+				buscarLibrosPorGenero(totalLibros,cantLibros)
+            caso "4":
 				devolverLibro(totalLibros,cantLibros,usuarioActual)
-            caso 5:
+            caso "5":
 				verLibrosAlquiladosUsuario(totalLibros,cantLibros,usuarioActual)
-            caso 6:
-                Escribir "Muchas gracias"
+			
+			caso "6":
+				ordenarAscLibroNombre(totalLibros,cantLibros,4)
+				Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+						Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+				Fin Para
+            caso "SALIR":
+                Escribir "Hasta pronto!!"
             caso contrario:
                 Escribir "Opción inválida. Intente nuevamente."
         Fin Segun
 		
-    Hasta Que opcionUsuario = 6
+    Hasta Que opcionUsuario = "SALIR"
 FinSubProceso
 
 
@@ -98,13 +106,13 @@ SubProceso verLibrosAlquiladosUsuario(totalLibros,cantLibros,usuarioActual) //ES
     Si cantLibrosAlquilados == 0 Entonces
         Escribir "Debe alquilar un libro para continuar"
     SiNo
-					
-			Para i <- 0 Hasta cantLibrosAlquilados - 1 Con Paso 1 Hacer
-				Escribir "Nombre :" librosAlquilados[i, 0], " || " "Autor: " librosAlquilados[i, 1]
-				
-			FinPara
-    FinSi
 		
+		Para i <- 0 Hasta cantLibrosAlquilados - 1 Con Paso 1 Hacer
+			Escribir "Nombre :" librosAlquilados[i, 0], " || " "Autor: " librosAlquilados[i, 1]
+			
+		FinPara
+    FinSi
+	
 FinSubProceso
 
 
@@ -134,7 +142,7 @@ SubProceso devolverLibro(totalLibros, cantLibros, usuarioActual) // Este subproc
 		
 		Repetir
 			
-		 
+			
 			Escribir "Ingrese el nombre del libro que desea devolver"
 			Para i <- 0 Hasta cantLibrosAlquilados - 1 Con Paso 1 Hacer
 				Escribir "Nombre :" librosAlquilados[i, 0], " || " "Autor: " librosAlquilados[i, 1]
@@ -143,12 +151,12 @@ SubProceso devolverLibro(totalLibros, cantLibros, usuarioActual) // Este subproc
 			Leer ingresoLibroUser
 			respuesta <- compararLibroAlquilado(cantLibrosAlquilados,ingresoLibroUser,librosAlquilados)
 		Hasta Que respuesta <> Falso
-	
+		
 		Escribir "Libro devuelto con éxito"
 		
 		Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
 			Si ingresoLibroUser == totalLibros[i,0] Entonces
-					totalLibros[i,3] <- "-"			
+				totalLibros[i,3] <- "-"			
 			FinSi
 		Fin Para
 		
@@ -156,7 +164,7 @@ SubProceso devolverLibro(totalLibros, cantLibros, usuarioActual) // Este subproc
 			Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
 		Fin Para
 		
-
+		
     FinSi
 FinSubProceso
 
@@ -201,7 +209,7 @@ FinFuncion
 
 
 //ORDENAR LIBRO POR GENERO
-SubProceso ordenarLibrosPorGenero(totalLibros, cantLibros)
+SubProceso buscarLibrosPorGenero(totalLibros, cantLibros)
     Definir generos,genero,generoActual Como  Caracter
     Definir cantGeneros Como Entero
 	Dimension generos[cantLibros]
@@ -233,36 +241,36 @@ SubProceso ordenarLibrosPorGenero(totalLibros, cantLibros)
     Fin Para
     
 	
-		Repetir
-			Escribir "Ingrese un género válido"
-			Leer genero
-			
-			
-			encontrado <- Falso
-			
-			Para i <- 0 Hasta cantGeneros - 1 Con Paso 1 Hacer
-				Si genero = generos[i] Entonces
-					encontrado <- Verdadero
-					
-				Fin Si
-			Fin Para
-			
-			
-				
-			Escribir "No se encontró ese género, pruebe con otro."
-		Hasta Que encontrado <> Falso
+	Repetir
+		Escribir "Ingrese un género válido"
+		Leer genero
 		
-		Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
-			Si totalLibros[i, 2] = genero Entonces
+		
+		encontrado <- Falso
+		
+		Para i <- 0 Hasta cantGeneros - 1 Con Paso 1 Hacer
+			Si genero = generos[i] Entonces
+				encontrado <- Verdadero
 				
-				Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
-			FinSi
+			Fin Si
 		Fin Para
+		
+		
+		
+		Escribir "No se encontró ese género, pruebe con otro."
+	Hasta Que encontrado <> Falso
+	
+	Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
+		Si totalLibros[i, 2] = genero Entonces
+			
+			Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+		FinSi
+	Fin Para
 FinSubProceso
 
 
 //ORDENARLIBROSPORAUTOR
-SubProceso ordenarLibrosPorAutor(totalLibros, cantLibros)
+SubProceso buscarLibrosPorAutor(totalLibros, cantLibros)
     Definir autores,autor,autorActual Como  Caracter
     Definir cantAutores Como Entero
 	Dimension autores[cantLibros]
@@ -288,7 +296,7 @@ SubProceso ordenarLibrosPorAutor(totalLibros, cantLibros)
     Fin Para
     
     
-	Escribir "Géneros disponibles:"
+	Escribir "Autores disponibles:"
     Para i <- 0 Hasta cantAutores - 1 Con Paso 1 Hacer
         Escribir autores[i]
     Fin Para
@@ -310,7 +318,7 @@ SubProceso ordenarLibrosPorAutor(totalLibros, cantLibros)
 		
 		
 		
-		Escribir "No se encontró ese género, pruebe con otro."
+		//Escribir "No se encontró ese género, pruebe con otro."
 	Hasta Que encontrado <> Falso
 	
 	Para i <- 0 Hasta cantLibros - 1 Con Paso 1 Hacer
@@ -343,9 +351,9 @@ SubProceso alquilarLibro(totalLibros,cantLibros,usuarioActual) // Esta función r
 	Mientras Que libroAAlquilar < 1 o libroAAlquilar > cantLibros
 	
 	totalLibros[libroAAlquilar-1,3] <- usuarioActual
-		//	Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
-		//		Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
-		//	Fin Para
+	//	Para i <- 0 Hasta cantLibros-1 Con Paso 1 Hacer
+	//		Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+	//	Fin Para
 	
 	
 FinSubProceso
@@ -424,6 +432,7 @@ SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCarga
         Escribir "3- Agregar usuario."
         Escribir "4- Ver lista de usuarios."
 		Escribir "5- Ver porcentaje de genero."
+		
         Escribir "6- Salir."
 		
         Leer opcionUsuario
@@ -447,6 +456,27 @@ SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCarga
 		
     Hasta Que opcionUsuario = 6
 FinSubProceso
+
+
+SubProceso ordenarAscLibroNombre(totalLibros,n,m)
+	Definir aux Como Caracter;
+	Definir nombrei, nombrek Como Caracter;
+	para i<-0 hasta n-2 Hacer //recorro las filas del array hasta la penultima
+		para k<-i+1 hasta n-1 Hacer //recorro las filas del array hasta la última
+			nombrei <- totalLibros[i,0]
+			nombrek <- totalLibros[k,0]
+			si nombrei>nombrek Entonces
+				Para j<-0 Hasta m-1 Hacer //recorro las columnas del array
+					aux <- totalLibros[i,j]
+					totalLibros[i,j] <- totalLibros[k,j] 
+					totalLibros[k,j] <- aux 
+				Fin Para
+			FinSi
+		FinPara
+	FinPara
+	
+FinSubProceso
+
 
 
 SubProceso verLibros(totalLibros,cantLibros)
@@ -511,7 +541,7 @@ SubProceso agregarUsuario(totalUsuarios, cantUsuarios Por Referencia)
 		Escribir "Excelente, el usuario "+ totalUsuarios[cantUsuarios,0] " fue creado con exito!"
 		cantUsuarios <- cantUsuarios + 1
 	Fin Para
-
+	
 FinSubProceso
 
 SubProceso verUsuarios(totalUsuarios, cantUsuarios Por Referencia)
@@ -547,18 +577,18 @@ SubProceso verGenero(totalLibros, cantLibros)
 FinSubProceso
 
 SubProceso cargarUsuarios(totalUsuarios) // Esta función setea 4 usuarios y contraseñas en el array totalUsuarios
- totalUsuarios[0,0] = "JohnDoe"
- totalUsuarios[0,1] = "pass123"
- totalUsuarios[1,0] = "JaneSmith"
- totalUsuarios[1,1] = "qwerty"
- totalUsuarios[2,0] = "AlexJohnson"
- totalUsuarios[2,1] = "password"
- totalUsuarios[3,0] = "EmilyBrown"
- totalUsuarios[3,1] = "abc123"
+	totalUsuarios[0,0] = "JohnDoe"
+	totalUsuarios[0,1] = "pass123"
+	totalUsuarios[1,0] = "JaneSmith"
+	totalUsuarios[1,1] = "qwerty"
+	totalUsuarios[2,0] = "AlexJohnson"
+	totalUsuarios[2,1] = "password"
+	totalUsuarios[3,0] = "EmilyBrown"
+	totalUsuarios[3,1] = "abc123"
 FinSubProceso
 
 SubProceso cargarLibros(totalLibros) // ESTE SUBRPOCESO DEFINE LA CARGA DE LOS 100 LIBROS CON EL NOMBRE 
-									 // EL AUTOR, EL GENERO , Y LA 4TA COLUMNA INDICA SI EL libro ESTÁ ALQUILADO O NO.
+	// EL AUTOR, EL GENERO , Y LA 4TA COLUMNA INDICA SI EL libro ESTÁ ALQUILADO O NO.
 	
 	totalLibros[0,0] = "Romeo y Julieta"
 	totalLibros[0,1] = "William Shakespeare"
@@ -1062,4 +1092,3 @@ SubProceso cargarLibros(totalLibros) // ESTE SUBRPOCESO DEFINE LA CARGA DE LOS 1
 	
 	
 FinSubProceso
-	
