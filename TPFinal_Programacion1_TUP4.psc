@@ -419,7 +419,7 @@ Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios)
 FinFuncion
 
 SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados Por Referencia, cantUsuarios Por Referencia)
-	Definir opcionUsuario Como Entero
+	Definir opcionUsuario Como Caracter
     Escribir "Bienvenido al menu administrador"
 	
     usuarioActual <- validacionInicioSesion(totalUsuarios)
@@ -433,28 +433,30 @@ SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCarga
         Escribir "4- Ver lista de usuarios."
 		Escribir "5- Ver porcentaje de genero."
 		
-        Escribir "6- Salir."
+        Escribir "6- Escribir Salir para salir."
 		
-        Leer opcionUsuario
+        Leer opcionUsuario 
+		opcionUsuario <- Mayusculas(opcionUsuario)
+		
 		
         Segun opcionUsuario Hacer
-            caso 1:
+            caso "1":
                 verLibros(totalLibros,librosCargados)
-            caso 2:
+            caso "2":
 				agregarLibro(totalLibros,librosCargados)
-            caso 3:
+            caso "3":
 				agregarUsuario(totalUsuarios, cantUsuarios)
-            caso 4:
+            caso "4":
 				verUsuarios(totalUsuarios, cantUsuarios)
-            caso 5:
+            caso "5":
                 verGenero(totalLibros, librosCargados)
-			caso 6:
-                Escribir "Muchas gracias"
+			caso "SALIR":
+                Escribir "Hasta pronto!!"
             caso contrario:
                 Escribir "Opción inválida. Intente nuevamente."
         Fin Segun
 		
-    Hasta Que opcionUsuario = 6
+    Hasta Que opcionUsuario = "SALIR"
 FinSubProceso
 
 
