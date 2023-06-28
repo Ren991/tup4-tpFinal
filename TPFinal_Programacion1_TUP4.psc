@@ -496,6 +496,7 @@ SubProceso agregarLibro(totalLibros, cantLibros Por Referencia)
 	//Funcion para agregar uno o mas libros al administrador
 	Definir aAgregar, i Como Entero
 	Escribir cantLibros
+	
 	Escribir "Cuantos libros desea agregar?"
 	Leer aAgregar
 	
@@ -506,15 +507,25 @@ SubProceso agregarLibro(totalLibros, cantLibros Por Referencia)
 	//HAY UN ERROR QUE NO TE MUESTRA EL ULTIMO LIBRO QUE AGREGAS, PERO SI AGREGAS OTRO DESPUES SI TE LO MUESTRA
 	Para i<-0 Hasta aAgregar-1 Hacer
 		
+		Repetir
+			Escribir "Ingrese el nombre del libro"
+			Leer totalLibros[cantLibros, 0]	
+			
+		Hasta Que Longitud(totalLibros[cantLibros, 0]) > 0  //Se VALIDA QUE LA CADENA QUE INGRESA EL USUARIO SEA MAYOR A 0 CARACTERES.
 		
-		Escribir "Ingrese el nombre del libro"
-		Leer totalLibros[cantLibros, 0]
+		Repetir
+			
+			Escribir "Ingrese el autor del libro"
+			Leer totalLibros[cantLibros, 1]
+		Hasta Que  Longitud(totalLibros[cantLibros, 1]) > 0 //Se VALIDA QUE LA CADENA QUE INGRESA EL USUARIO SEA MAYOR A 0 CARACTERES.
 		
-		Escribir "Ingrese el autor del libro"
-		Leer totalLibros[cantLibros, 1]
+		Repetir
+			Escribir "Ingrese el genero del libro"
+			Leer totalLibros[cantLibros, 2]
+		Hasta Que Longitud(totalLibros[cantLibros, 2]) > 0  //Se VALIDA QUE LA CADENA QUE INGRESA EL USUARIO SEA MAYOR A 0 CARACTERES.
 		
-		Escribir "Ingrese el genero del libro"
-		Leer totalLibros[cantLibros, 2]
+		
+		totalLibros[cantLibros, 3] <- "-"  //Por defecto aparece como no alquilado osea con "-".
 		
 		Escribir "Perfecto! El libro " + totalLibros[cantLibros, 0] + " fue ingresado con éxito."
 		cantLibros = cantLibros + 1
