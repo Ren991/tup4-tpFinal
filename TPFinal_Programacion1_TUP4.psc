@@ -1,17 +1,20 @@
 Proceso TPFinal_Programacion1_TUP4
 	Definir totalLibros,totalUsuarios,usuarioActual Como Caracter
-	Definir cantLibros Como Entero
-	cantLibros <- 100
+	Definir cantLibros, librosCargados, cantUsuarios Como Entero
+	cantLibros <- 150
+	
+	
 	
 	Dimension totalLibros[cantLibros,4]
-	Dimension totalUsuarios[10,2]
+	Dimension totalUsuarios[20,2]
 	
 	
 	Escribir "Bienvenido a la biblioteca !!"
 	
 	cargarLibros(totalLibros)
+	librosCargados<-100
 	cargarUsuarios(totalUsuarios)
-	
+	cantUsuarios <- 4
 	
 	
 
@@ -24,10 +27,10 @@ Proceso TPFinal_Programacion1_TUP4
 	
 	Si userOAdmin == 1 Entonces //SI ES USUARIO SE MUESTRA EL MENU DE USUARIO
 		
-		menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros)
+		menuUsuario(totalUsuarios,usuarioActual,totalLibros,librosCargados)
 		
 	SiNo						//SI ES ADMIN SE MUESTRA EL MENU DE ADMIN
-		menuAdministrador()
+		menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados, cantUsuarios)
 	FinSi
 	
 	
@@ -59,11 +62,11 @@ SubProceso menuUsuario(totalUsuarios,usuarioActual,totalLibros,cantLibros) //Est
             caso 2:
 				ordenarLibrosPorAutor(totalLibros,cantLibros)
             caso 3:
-				ordenarLibrosPorGenero(totalLibros, cantLibros)
+				ordenarLibrosPorGenero(totalLibros,cantLibros)
             caso 4:
 				devolverLibro(totalLibros,cantLibros,usuarioActual)
             caso 5:
-				verLibrosAlquilados(totalLibros,cantLibros,usuarioActual)
+				verLibrosAlquiladosUsuario(totalLibros,cantLibros,usuarioActual)
             caso 6:
                 Escribir "Muchas gracias"
             caso contrario:
@@ -75,7 +78,7 @@ FinSubProceso
 
 
 //VERLIBROSALQUILADOS 
-SubProceso verLibrosAlquilados(totalLibros,cantLibros,usuarioActual) //ESTA FUNCION MUESTRA LOS LIBROS QUE ALQUILÓ EL USUARIO
+SubProceso verLibrosAlquiladosUsuario(totalLibros,cantLibros,usuarioActual) //ESTA FUNCION MUESTRA LOS LIBROS QUE ALQUILÓ EL USUARIO
 	
 	Definir cantLibrosAlquilados Como Entero
     Dimension librosAlquilados[cantLibros, 2]
@@ -407,8 +410,140 @@ Funcion return <- compararCredenciales(usuario,contrasena,totalUsuarios)
 	
 FinFuncion
 
-SubProceso menuAdministrador()
-	Escribir "Menu administrador"
+SubProceso menuAdministrador(totalUsuarios,usuarioActual,totalLibros,librosCargados Por Referencia, cantUsuarios Por Referencia)
+	Definir opcionUsuario Como Entero
+    Escribir "Bienvenido al menu administrador"
+	
+    usuarioActual <- validacionInicioSesion(totalUsuarios)
+	Escribir usuarioActual
+	
+    Repetir
+        Escribir "Ingrese una opcion:"
+        Escribir "1- Ver listado de libros."
+        Escribir "2- Agregar libro."
+        Escribir "3- Agregar usuario."
+        Escribir "4- Ver lista de usuarios."
+		Escribir "5- Ver porcentaje de genero."
+        Escribir "6- Salir."
+		
+        Leer opcionUsuario
+		
+        Segun opcionUsuario Hacer
+            caso 1:
+                verLibros(totalLibros,librosCargados)
+            caso 2:
+				agregarLibro(totalLibros,librosCargados)
+            caso 3:
+				agregarUsuario(totalUsuarios, cantUsuarios)
+            caso 4:
+				verUsuarios(totalUsuarios, cantUsuarios)
+            caso 5:
+                verGenero(totalLibros, librosCargados)
+			caso 6:
+                Escribir "Muchas gracias"
+            caso contrario:
+                Escribir "Opción inválida. Intente nuevamente."
+        Fin Segun
+		
+    Hasta Que opcionUsuario = 6
+FinSubProceso
+
+
+SubProceso verLibros(totalLibros,cantLibros)
+	//Con esta funcion solo mostramos la lista al administrador
+	Definir i Como Entero
+	Escribir "Estos son todos los libros actuales:"
+	Escribir cantLibros
+	
+	Para i<-0 Hasta cantLibros-1 Hacer
+		Escribir "Nombre:" totalLibros[i,0] , "||" " Autor:" totalLibros[i,1] ,"||" " Genero: " totalLibros[i,2] ,"||" " Alquilado: " totalLibros[i,3]
+	Fin Para
+FinSubProceso
+
+SubProceso agregarLibro(totalLibros, cantLibros Por Referencia)
+	//Funcion para agregar uno o mas libros al administrador
+	Definir aAgregar, i Como Entero
+	Escribir cantLibros
+	Escribir "Cuantos libros desea agregar?"
+	Leer aAgregar
+	
+	Mientras aAgregar<1 O aAgregar>50 Hacer
+		Escribir "El maximo para agregar son 50 libros, ingrese un numero valido"
+		Leer aAgregar
+	Fin Mientras
+	//HAY UN ERROR QUE NO TE MUESTRA EL ULTIMO LIBRO QUE AGREGAS, PERO SI AGREGAS OTRO DESPUES SI TE LO MUESTRA
+	Para i<-0 Hasta aAgregar-1 Hacer
+		
+		
+		Escribir "Ingrese el nombre del libro"
+		Leer totalLibros[cantLibros, 0]
+		
+		Escribir "Ingrese el autor del libro"
+		Leer totalLibros[cantLibros, 1]
+		
+		Escribir "Ingrese el genero del libro"
+		Leer totalLibros[cantLibros, 2]
+		
+		Escribir "Perfecto! El libro " + totalLibros[cantLibros, 0] + " fue ingresado con éxito."
+		cantLibros = cantLibros + 1
+	Fin Para
+FinSubProceso
+
+SubProceso agregarUsuario(totalUsuarios, cantUsuarios Por Referencia)
+	//Funcion para agregar usuarios
+	Definir aAgregar, i Como Entero
+	Escribir "Cuantos usuarios desea agregar?"
+	Leer aAgregar
+	
+	Mientras aAgregar<1 O aAgregar>16 Hacer
+		Escribir "El maximo para agregar son 16 usuarios, ingrese un numero valido"
+		Leer aAgregar
+	Fin Mientras
+	
+	//Recorremos la cantidad de elementos a agregar
+	Para i<-0 Hasta aAgregar-1 Hacer
+		Escribir "Ingrese el nombre de usuario:"
+		Leer totalUsuarios[cantUsuarios,0]
+		
+		Escribir "Ingrese la contraseña de usuario:"
+		Leer totalUsuarios[cantUsuarios,1]
+		
+		Escribir "Excelente, el usuario "+ totalUsuarios[cantUsuarios,0] " fue creado con exito!"
+		cantUsuarios <- cantUsuarios + 1
+	Fin Para
+
+FinSubProceso
+
+SubProceso verUsuarios(totalUsuarios, cantUsuarios Por Referencia)
+	//Con esta funcion solo mostramos la lista al administrador
+	Definir i Como Entero
+	Escribir "Mostrando los " cantUsuarios " usuarios:"
+	
+	Para i<-0 Hasta cantUsuarios-1 Hacer
+		Escribir "Nombre de usuario: " totalUsuarios[i,0] , " || " " Contraseña: " totalUsuarios[i,1]
+	Fin Para
+FinSubProceso
+
+SubProceso verGenero(totalLibros, cantLibros)
+	Definir genero Como Caracter
+	Definir contador, i Como Entero
+	Definir porcentaje Como Real
+	contador <- 0
+	
+	Escribir "De que genero deseas ver el porcentaje?"
+	Leer genero
+	
+	Para i<-0 Hasta cantLibros-1 Hacer
+		Si totalLibros[i,2] = genero Entonces
+			contador <- contador + 1
+		FinSi
+	Fin Para
+	porcentaje <- contador * 100 / cantLibros 
+	Si contador = 0 Entonces
+		Escribir "No hay libros con el genero ingresado"
+	SiNo
+		Escribir "El genero ", genero, " aparece en ", contador, " libros, el ", porcentaje, "% de los libros totales."
+	FinSi
 FinSubProceso
 
 SubProceso cargarUsuarios(totalUsuarios) // Esta función setea 4 usuarios y contraseñas en el array totalUsuarios
