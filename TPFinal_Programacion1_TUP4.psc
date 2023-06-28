@@ -490,6 +490,7 @@ SubProceso agregarLibro(totalLibros, cantLibros Por Referencia)
 FinSubProceso
 
 SubProceso agregarUsuario(totalUsuarios, cantUsuarios Por Referencia)
+	//Funcion para agregar usuarios
 	Definir aAgregar, i Como Entero
 	Escribir "Cuantos usuarios desea agregar?"
 	Leer aAgregar
@@ -499,6 +500,7 @@ SubProceso agregarUsuario(totalUsuarios, cantUsuarios Por Referencia)
 		Leer aAgregar
 	Fin Mientras
 	
+	//Recorremos la cantidad de elementos a agregar
 	Para i<-0 Hasta aAgregar-1 Hacer
 		Escribir "Ingrese el nombre de usuario:"
 		Leer totalUsuarios[cantUsuarios,0]
@@ -518,8 +520,30 @@ SubProceso verUsuarios(totalUsuarios, cantUsuarios Por Referencia)
 	Escribir "Mostrando los " cantUsuarios " usuarios:"
 	
 	Para i<-0 Hasta cantUsuarios-1 Hacer
-		Escribir "Nombre de usuario: " totalUsuarios[i,0] , " ||" " Contraseña: " totalUsuarios[i,1]
+		Escribir "Nombre de usuario: " totalUsuarios[i,0] , " || " " Contraseña: " totalUsuarios[i,1]
 	Fin Para
+FinSubProceso
+
+SubProceso verGenero(totalLibros, cantLibros)
+	Definir genero Como Caracter
+	Definir contador, i Como Entero
+	Definir porcentaje Como Real
+	contador <- 0
+	
+	Escribir "De que genero deseas ver el porcentaje?"
+	Leer genero
+	
+	Para i<-0 Hasta cantLibros-1 Hacer
+		Si totalLibros[i,2] = genero Entonces
+			contador <- contador + 1
+		FinSi
+	Fin Para
+	porcentaje <- contador * 100 / cantLibros 
+	Si contador = 0 Entonces
+		Escribir "No hay libros con el genero ingresado"
+	SiNo
+		Escribir "El genero ", genero, " aparece en ", contador, " libros, el ", porcentaje, "% de los libros totales."
+	FinSi
 FinSubProceso
 
 SubProceso cargarUsuarios(totalUsuarios) // Esta función setea 4 usuarios y contraseñas en el array totalUsuarios
